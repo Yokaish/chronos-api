@@ -52,8 +52,12 @@ public class TaskEntity {
         this.description = data.description();
         this.status = TaskStatus.PENDING;
         this.priority = data.priority();
-        if (data.dueDate() != null && !data.dueDate().isBlank()) {
-            this.dueDate = DataParser.parseSimpleData(data.dueDate());
+        if (data.dueDate() != null) {
+            var parsedDueDate = DataParser.parseSimpleData(data.dueDate());
+            if (parsedDueDate.isBefore(this.createdAt)) {
+                throw new IllegalArgumentException("Due date must be equal or later than createdAt");
+            }
+            this.dueDate = parsedDueDate;
         }
     }
 
