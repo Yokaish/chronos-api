@@ -23,6 +23,22 @@ public class ErrorHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity handleIllegalArgumentException(IllegalArgumentException ex) {
+        var error = new ErrorDTO(400, ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(java.time.format.DateTimeParseException.class)
+    public ResponseEntity handleDateTimeParseException(java.time.format.DateTimeParseException ex) {
+        var error = new ErrorDTO(400, ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
+
+    private record ErrorDTO(int status, String message) {}
+
+
     private record ErrorValidationDataDTO(String code, String field, String message) {
         public ErrorValidationDataDTO(FieldError error) {
             this(error.getCode(), error.getField(), error.getDefaultMessage());

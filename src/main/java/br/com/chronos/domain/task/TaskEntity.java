@@ -34,18 +34,13 @@ public class TaskEntity {
     private TaskPriority priority;
 
     @Column(nullable = false, updatable = false)
-    private ZonedDateTime createdAt;
+    private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("UTC"));
 
     @Column
     private ZonedDateTime dueDate;
 
     @Column
     private ZonedDateTime completedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = ZonedDateTime.now(ZoneId.of("UTC"));
-    }
 
     public TaskEntity(TaskDataDTO data) {
         this.title = data.title();
