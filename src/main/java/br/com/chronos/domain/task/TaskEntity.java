@@ -56,6 +56,10 @@ public class TaskEntity {
         }
     }
 
+    public void markAsPending() {
+        this.status = TaskStatus.PENDING;
+    }
+
     public void markAsInProgress() {
         this.status = TaskStatus.IN_PROGRESS;
     }

@@ -1,10 +1,9 @@
 package br.com.chronos.service;
 
-import br.com.chronos.domain.task.TaskDataDTO;
-import br.com.chronos.domain.task.TaskEntity;
-import br.com.chronos.domain.task.TaskResponseDTO;
-import br.com.chronos.domain.task.TaskStatus;
+import br.com.chronos.domain.task.*;
 import br.com.chronos.repository.TaskRepository;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,4 +57,22 @@ public class TaskService {
 
         return ResponseEntity.ok(groupedTasks);
     }
+
+    @Transactional
+    public ResponseEntity<TaskResponseDTO> updateTask(Long id, TaskStatusUpdateDTO statusUpdate) {
+
+        TaskEntity task = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        switch (statusUpdate.status()) {
+            case PENDING -> task.markAsPending();
+            case IN_PROGRESS -> task.markAsInProgress();
+            case COMPLETED -> task.markAsCompleted();
+        }
+
+        repository.save(task);
+
+        return ResponseEntity.ok(new TaskResponseDTO(task));
+    }
+
 }

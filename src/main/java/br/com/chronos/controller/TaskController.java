@@ -3,6 +3,7 @@ package br.com.chronos.controller;
 
 import br.com.chronos.domain.task.TaskDataDTO;
 import br.com.chronos.domain.task.TaskStatus;
+import br.com.chronos.domain.task.TaskStatusUpdateDTO;
 import br.com.chronos.repository.TaskRepository;
 import br.com.chronos.service.TaskService;
 import jakarta.validation.Valid;
@@ -33,6 +34,11 @@ public class TaskController {
     @GetMapping("/all")
     public ResponseEntity listAllTasks() {
         return service.listAllTasks();
+    }
+
+    @PutMapping("update/{id}/status")
+    public ResponseEntity updateTask(@PathVariable Long id, @RequestBody @Valid TaskStatusUpdateDTO status) {
+        return service.updateTask(id, status);
     }
 
 }
