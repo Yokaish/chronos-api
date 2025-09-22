@@ -75,4 +75,15 @@ public class TaskService {
         return ResponseEntity.ok(new TaskResponseDTO(task));
     }
 
+    @Transactional
+    public ResponseEntity deleteTask(Long id) {
+
+        TaskEntity task = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Any tasks found with id: " + id));
+
+        repository.delete(task);
+
+        return ResponseEntity.noContent().build();
+
+    }
 }
